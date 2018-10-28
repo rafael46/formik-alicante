@@ -1,11 +1,22 @@
 import React from 'react';
-import { Formik, Field, Form, FieldArray, ErrorMessage } from 'formik';
+import { Formik, Field, Form, FieldArray, ErrorMessage, FastField } from 'formik';
 import { Debug } from '../components/Debug';
 import * as Yup from 'yup';
 import { EditorState } from 'draft-js';
 import { RichEditorExample } from '../components/RichEditor';
 
+const Fieldset = ({ label, name, ...props }) => (
+  <React.Fragment>
+    <label htmlFor={name}>{label}</label>
+    <FastField name={name} {...props} />
+    <ErrorMessage name={name}>
+      {msg => <div className="field-error">{msg}</div>}
+    </ErrorMessage>
+  </React.Fragment>
+);
+
 const initialValues = {
+ 
   friends: [
     {
       name: '',
@@ -13,6 +24,7 @@ const initialValues = {
     },
   ],
   editorState: new EditorState.createEmpty(),
+  firstName: '',
 };
 
 const Invitation = () => (
@@ -42,6 +54,12 @@ const Invitation = () => (
             editorState={values.editorState}
             onChange={setFieldValue}
             onBlur={handleBlur}
+          />
+          <Fieldset
+            name="firstName"
+            label="First Name"
+            type="text"
+            placeholder="jane"
           />
           <FieldArray name="friends">
             {({ push, remove }) => (
